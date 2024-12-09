@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   layout "session"
+
   def new
     @user = User.new
   end
@@ -7,6 +8,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      NotificationFactory.create_notification(:email, @user, "Welcome to our platform, #{@user.name}!")
       redirect_to root_path, notice: "User created successfully!"
     else
       render :new
