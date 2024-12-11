@@ -1,0 +1,32 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: postgres
+
+development:
+  <<: *default
+  database: theme_pro_development
+
+test:
+  <<: *default
+  database: theme_pro_test
+
+production:
+  primary: &primary_production
+    <<: *default
+    database: theme_pro_production
+    username: theme_pro
+    password: <%= ENV["THEME_PRO_DATABASE_PASSWORD"] %>
+  cache:
+    <<: *primary_production
+    database: theme_pro_production_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    database: theme_pro_production_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *primary_production
+    database: theme_pro_production_cable
+    migrations_paths: db/cable_migrate
